@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+
+
+# Set up
+
+base_dir = File.exists?("~/code/wdi/rosencrantz/") ? "~/dev/wdi/rosencrantz/" : "~/code/wdi/rosencrantz/"
+filename = "table_of_contents.md"
+file_path = File.expand_path base_dir + filename
+path = File.expand_path base_dir
+
+base_text ="![](https://raw.githubusercontent.com/generalassembly-wdi/Prework/master/assets/WDI-Logo.png 'WDI')  \n#WDI Table of Contents\n---\n"
+
+File.open(file_path, "w+"){ |f| f.write base_text}
+
+
+# Helper functions
+
+def filenames_to_md(file, arr, n) 
+	return if n == arr.length
+
+	filename = arr[n][/(Homework|Instructors|Classwork).*/]
+
+	if filename
+		file.puts "\n\t- #{arr[n][/(Homework|Instructors|Classwork).*/]}"
+	end
+
+	filenames_to_md(file, arr, n += 1 )
+
+end
+
+
+# Actual file writing
+
+week_folders = Dir.glob(path + "/**").reject{ |folder| !/w\d{2}$/.match(folder)  }
+
+File.open(file_path, "a") do |f|
+
+	week_folders.each do |week|
+		week_heading = week[/([^\/]*)$/]
+		f.puts "\n###**#{week_heading}** "
+
+		day_folders = Dir.glob(path + "/#{week_heading}/**").reject{ |folder| !/d\d{2}$/.match(folder)  }
+		day_folders.each do |day|
+			day_heading = day[/([^\/]*)$/]
+			f.puts "\n- **#{day_heading}**"
+
+			only_files = Dir.glob(day + "/**/**").reject{|x| File.directory?(x) ? true : false}
+			n = 0
+
+			filenames_to_md(f, only_files, n)
+		end
+
+	end
+
+end
+
+
+
+
+
+
+
+
