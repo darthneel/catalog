@@ -1,11 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'pry'
-
-
 # Set up
 
-base_dir = File.exists?("~/code/wdi/rosencrantz/") ? "~/dev/wdi/rosencrantz/" : "~/code/wdi/rosencrantz/"
+base_dir = File.exists?("~/code/wdi/Princess_Zelda/") ? "~/dev/wdi/Princess_Zelda/" : "~/code/wdi/Princess_Zelda/"
 filename = "table_of_contents.md"
 file_path = File.expand_path base_dir + filename
 path = File.expand_path base_dir
@@ -20,7 +17,7 @@ File.open(file_path, "w+"){ |f| f.write base_text}
 def filenames_to_md(file, arr, n) 
 	return if n == arr.length
 
-	filename = arr[n][/(Homework|Instructors|Classwork).*/]
+	filename = arr[n][/(Labs|Instructors|Classwork).*/]
 
 	if filename
 		file.puts "\n\t- #{arr[n][/(Homework|Instructors|Classwork).*/]}"
